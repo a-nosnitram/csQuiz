@@ -15,3 +15,4 @@ To use the reset password function :
         Make sure that the google account for this email has ‘less secure apps’ enabled and 2FA disabled
 
 
+# csQuiz
