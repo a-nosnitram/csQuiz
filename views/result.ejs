@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="styles\style.css">
+    <title> Quiz results </title>
+    <style>
+        h2 {
+            font-size: xx-large;
+        }
+
+        h1 {
+            font-size: larger;
+        }
+
+        .inc-q-list {
+            list-style: none;
+            font-size: medium;
+            text-align: left;
+        }
+
+        .inc-q-list p {
+            margin-top: 0px;
+            margin-bottom: 10px;
+            margin-left: 20px;
+            margin-right: 20px;
+        }
+
+        .horizontal-line {
+            border: none;
+            border-top: 1px solid #ccc;
+            margin: 20px 0px;
+        }
+
+        .divide-line {
+            border: none;
+            border-top: 1px solid rgba(204, 204, 204, 0.326);
+            margin: 5px 0;
+            margin-left: 20px;
+            margin-right: 20px;
+        }
+
+        .label {
+            font-size: small;
+            color: rgb(98, 103, 101);
+        }
+
+        form {
+            max-width: 700px;
+        }
+
+        .correct {
+            color: #39b77e;
+        }
+
+        .bad-answer {
+            color: rgb(185, 23, 23);
+        }
+    </style>
+</head>
+
+<body>
+    <h1>your total score is </h1>
+    <h2>
+        <%= score %>
+    </h2>
+    <form id="backForm" action="/result?username=<%= encodeURIComponent(username)%>" method="post">
+        <input type="hidden" name="username" value="<%= username %>">
+        <%if (incorrectQuestions.length > 0) {%>
+            <h3> Questions you got wrong : </h3>
+            <% incorrectQuestions.forEach(function(question) { %>
+                <li class="inc-q-list">
+                    <p class="label">Question: </p>
+                    <p>
+                        <%= question.question %>
+                    </p>
+                    <hr class="divide-line">
+                    <p class="label">Correct Answer:</p>
+                    <p class="correct">
+                        <%= question.correctAnswer %>
+                    </p>
+                    <hr class="divide-line">
+                    <p class="label">Your Answer:</p>
+                    <% if (question.userAnswer) { %>
+                        <p class="bad-answer">
+                            <%= question.userAnswer %>
+                        </p>
+                        <% } else {%>
+                            <p class="bad-answer"> you didn't answer </p>
+                            <%}%>
+                                <hr class="horizontal-line">
+                </li>
+                <% }) %>
+                    <% }%>
+                        <button type="submit">Back to Home Page</button>
+    </form>
+</body>
+
+</html>

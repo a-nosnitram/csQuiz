@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="styles\style.css">
+  <title>Quiz</title>
+  <style>
+    .option-list {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .option-list button {
+      width: 400px;
+      padding: 10px;
+      margin: 5px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s ease;
+    }
+
+    .option-list button.active {
+      background-color: #41946f;
+    }
+
+    .quiz-summary {
+      display: none;
+      font-size: 18px;
+      margin-top: 20px;
+    }
+
+    .question {
+      max-width: 500px;
+      font-size: 16px;
+      margin: none;
+    }
+
+    .option-list button.buttonClicked {
+      background-color: #2b5441;
+    }
+
+    #question-list {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  </style>
+</head>
+ 
+<body>
+  <form id="quiz-form" action="/quiz/submit?topic=<%= topic %>&username=<%= encodeURIComponent(username) %>" method="post">
+    <h1>Topic <%= topic %></h1>
+
+    <ul id="question-list">
+      <% for (let i=0; i < questions.length; i++) { %>
+        <li class="question  i === 0 ? 'active' : '' " data-question-index=" i ">
+          <p><strong>Question <%= i + 1 %> :</strong>
+            <%= questions[i].question_text %>
+          </p>
+          <ul class="option-list">
+            <li>
+              <!-- hidden input for each question to store the selected answer -->
+              <input id="hidden_inp <%=i%>" type="hidden" name="answers[]" value="" />
+              <input id="ids" type="hidden" name="ids[]" value="<%= questions[i].id_questions %>" />
+              <button type="button" id="optionButton <%=i%>/1 " data-option=" <%= questions[i].option1 %>  ">
+                <%= questions[i].option1 %>
+              </button>
+            </li>
+            <li>
+              <button type="button" id="optionButton <%=i%>/2 " data-option=" <%= questions[i].option2 %>  ">
+                <%= questions[i].option2 %>
+              </button>
+            </li>
+            <li>
+              <button type="button" id="optionButton <%=i%>/3 " data-option=" <%= questions[i].option3 %>  ">
+                <%= questions[i].option3 %>
+              </button>
+            </li>
+            <li>
+              <button type="button" id="optionButton <%=i%>/4 " data-option=" <%= questions[i].option4 %>  ">
+                <%= questions[i].option4 %>
+              </button>
+            </li>
+          </ul>
+        </li>
+        <script>
+          document.getElementById("optionButton <%=i%>/1 ").addEventListener('click', function (e) {
+            answerClicked(this, '<%=questions[i].option1%>', '<%=i%>')
+          });
+          document.getElementById("optionButton <%=i%>/2 ").addEventListener('click', function (e) {
+            answerClicked(this, "<%=questions[i].option2%>", '<%=i%>')
+          });
+          document.getElementById("optionButton <%=i%>/3 ").addEventListener('click', function (e) {
+            answerClicked(this, "<%=questions[i].option3%>", '<%=i%>')
+          });
+          document.getElementById("optionButton <%=i%>/4 ").addEventListener('click', function (e) {
+            answerClicked(this, '<%=questions[i].option4%>', '<%=i%>')
+          });
+        </script>
+        <% } %>
+    </ul>
+    <button type="submit">Submit</button>
+  </form>
+</body>
+
+<script>
+  // function to save the currently selected answer for each 
+  // question that will send all the answers with the POST submit request
+
+  function answerClicked(button, option, questionIndex) {
+    var questionElement = button.closest('.question')
+    var buttonsInQuestion = questionElement.querySelectorAll('.option-list button')
+    buttonsInQuestion.forEach(function (btn) {
+      btn.classList.remove('active')
+      btn.classList.remove('buttonClicked')
+
+    });
+    button.classList.add('active')
+    button.classList.add('buttonClicked')
+
+    // update the hidden input with the selected answer
+    var hiddenInput = document.getElementById(`hidden_inp ${questionIndex}`)
+    hiddenInput.value = option
+    
+  }
+</script>
+</html>

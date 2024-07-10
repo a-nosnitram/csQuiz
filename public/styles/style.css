@@ -1,0 +1,95 @@
+body {
+    font-family: 'Andale mono';
+    background-color: #121212;
+    color: #ffffff;
+    text-align: center;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    font-size: larger;
+}
+
+form {
+    max-width: 400px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #1e1e1e;
+    border-radius: 8px;
+}
+
+label {
+    display: block;
+    margin: 10px 0;
+    text-align: left;
+    color: #ffffff;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    border: 1px solid #383838;
+    border-radius: 4px;
+    background-color: #292929;
+    color: #ffffff;
+}
+
+button {
+    background-color: #3e8b68;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #356750;
+}
+
+select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #383838;
+    border-radius: 4px;
+    background-color: #292929;
+    color: #ffffff;
+}
+
+textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    border: 1px solid #383838;
+    border-radius: 4px;
+    background-color: #292929;
+    color: #ffffff;
+}
+
+.error {
+    color: red;
+    margin-top: 5px;
+    font-size: 14px;
+}
+
+.logout {
+    background-color: transparent;
+}
+
+.log-out-button {
+    max-width: 100px;
+    justify-self: center;
+    background: rgba(165, 42, 42, 0.436);
+}
+
+.log-out-button:hover {
+    background-color: rgba(128, 0, 0, 0.35);
+}

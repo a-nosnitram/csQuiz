@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="styles\style.css">
+    <title>Student Home Page</title>
+
+    <style>
+        .topic-list {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .topic-list li {
+            margin: 10px;
+            text-align: center;
+        }
+
+        .topic-list button {
+            width: 500px;
+            padding: 10px;
+            margin-bottom: 0px;
+            text-align: left;
+        }
+
+
+        .option-list {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            margin: 0;
+            margin-right: 20px;
+        }
+
+        .question {
+            list-style: none;
+            justify-content: center;
+            margin-right: 20px;
+            font-size: 18px;
+            max-width: 500px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Welcome to csQuiz, <%= username %>!</h1>
+    <p>Your overall score : <%= score %>
+    </p>
+
+    <ul class="topic-list">
+        <li><a href="/quiz?topic=1&username=<%= encodeURIComponent(username) %>"><button>Topic 1 : System
+                    fundamentals</button></a></li>
+        <li><a href="/quiz?topic=2&username=<%= encodeURIComponent(username) %>"><button>Topic 2 : Computer
+                    organisation</button></a></li>
+        <li><a href="/quiz?topic=3&username=<%= encodeURIComponent(username) %>"><button>Topic 3 : Networks</button></a>
+        </li>
+        <li><a href="/quiz?topic=4&username=<%= encodeURIComponent(username) %>"><button>Topic 4 : Computational
+                    thinking, problem-solving and programming</button></a></li>
+        <li><a href="/quiz?topic=5&username=<%= encodeURIComponent(username) %>"><button>Topic 5 : Abstract data
+                    structures</button></a></li>
+        <li><a href="/quiz?topic=6&username=<%= encodeURIComponent(username) %>"><button>Topic 6 : Resource
+                    management</button></a></li>
+        <li><a href="/quiz?topic=7&username=<%= encodeURIComponent(username) %>"><button>Topic 7 : Control</button></a>
+        </li>
+    </ul>
+
+    <form class= "logout" action="/login" method="get">
+        <button class="log-out-button" type="submit">Logout</button>
+    </form>
+
+</body>
+
+</html>

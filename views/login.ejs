@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="styles\style.css">
+    <title>Log in</title>
+</head>
+<body>
+
+    <h1>Welcome to csQuiz !</h1>
+
+    <form action="/login" method="POST">
+        <label>username :
+            <input type="text" name="username" value="<%= locals.username %>" />
+        </label>
+        <label>password :
+            <input type="password" id="password" name="password" class="password-input" value="<%= locals.password %>" />       
+        </label>
+        <button type="submit">Log in</button>
+        <% if (errorMessage) { %>
+            <p style="color: rgb(144, 55, 55);"><%= errorMessage %></p>
+        <% } %>
+
+        <% if (passwordChanged) {%>
+            <p style="color: rgb(55, 144, 103);">Password Changed Successfully !</p>
+
+            <% } %>
+
+    </form>
+</body> 
+</html>

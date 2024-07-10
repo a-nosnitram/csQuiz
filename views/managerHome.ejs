@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="styles/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/vfs_fonts.js"></script>
+    <style>
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        h2 {
+            font-size: large;
+            color: #3e8b68;
+        }
+
+        .left-column {
+            flex: 1;
+            padding: 20px;
+        }
+
+        .right-column {
+            flex: 1;
+            padding: 20px;
+        }
+
+        .accordion {
+            background-color: #1e1e1e;
+            margin-bottom: 10px;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+        }
+
+        .accordion-button {
+            background-color: #1e1e1e;
+            cursor: pointer;
+            width: 100%;
+            text-align: center;
+            border: none;
+            outline: none;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            font-size: medium;
+        }
+
+        .accordion-button:hover {
+            background-color: #131212;
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.7s ease-out;
+            padding: 0 10px;
+        }
+
+        .ranking-container {
+            background-color: #1e1e1e;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .ranking-item {
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .top-score {
+            background-color: #213f2e;
+        }
+
+        .add-question-container {
+            background-color: #1e1e1e;
+            padding: 0px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            margin-top: 5px;
+        }
+
+        form {
+            display: grid;
+            gap: 5px;
+        }
+
+        label,
+        input,
+        select {
+            margin-bottom: 10px;
+        }
+
+        .horizontal-line {
+            border: none;
+            border-top: 1px solid #ccc;
+            margin: 5px 0;
+        }
+
+        #questions-accordion {
+            text-align: left;
+            background-color: #1e1e1e;
+            font-size: smaller;
+        }
+
+        .username,
+        .score {
+            margin-right: 10px;
+            margin-left: 10px;
+        }
+
+        .performancePDFbutton {
+            font-size: xx-small;
+            background-color: transparent;
+            float: left;
+            margin-right: 10px;
+        }
+
+        .performancePDFbutton:hover {
+            text-decoration: underline;
+            background-color: transparent;
+        }
+
+        #questions-button {
+            text-align: left;
+        }
+    </style>
+    <title>Manager Home Page</title>
+</head>
+
+<body>
+    <h1>Welcome to the Manager Home Page, <%= username %> !</h1>
+    <div class="container">
+        <div class="left-column">
+            <h2>Student Ranking</h2>
+            <div class="ranking-container">
+                <span class="crown">&#128081;</span>
+                <% students.forEach((student, index)=> { %>
+                    <div class="ranking-item <%= index === 0 ? 'top-score' : '' %>">
+                        <span class="username">
+                            <%= student.username %>
+                        </span> - Score: <span class="score">
+                            <%= student.score %>
+                        </span>
+                        <button class="performancePDFbutton" data="<%= student.quizHistory %>"
+                            studentUsername="<%= student.username %>">Generate Performance PDF</button>
+                    </div>
+                    <% }) %>
+            </div>
+            <button id="rankingPDFbutton">Generate PDF of the ranking</button>
+        </div>
+
+        <div class="right-column">
+            <h2>Update the questions database</h2>
+            <!-- display error message if fields were not filled appropriately -->
+            <% if (errorMessage) { %>
+                <p style="color: rgb(144, 55, 55);"> <%= errorMessage %> </p>
+                <% } %>
+                    <!-- display success message if question added  -->
+                    <% if (message) {%>
+                        <p style="color: rgb(55, 144, 103);"> <%= message %> </p>
+                        <% } %>
+                            <div class="accordion">
+                                <button class="accordion-button" id="add-question-toggle">Add a new question</button>
+                                <div class="accordion-content" id="add-question-content">
+                                    <div class="add-question-container">
+                                        <form
+                                            action="/managerHome/addQuestion?username=<%= encodeURIComponent(username) %>"
+                                            method="post">
+                                            <label for="topic"></label>
+                                            <select id="topic" name="topic">
+                                                <option value="">Select a Topic</option>
+                                                <option value=1>Topic 1 : System fundamentals </option>
+                                                <option value=2>Topic 2 : Computer organisation </option>
+                                                <option value=3>Topic 3 : Networks </option>
+                                                <option value=4>Topic 4 : Computational thinking, problem-solving and
+                                                    programming
+                                                </option>
+                                                <option value=5>Topic 5 : Abstract data structures </option>
+                                                <option value=6>Topic 6 : Resource management </option>
+                                                <option value=7>Topic 7 : Control</option>
+                                            </select>
+                                            <label for="question">Question:</label>
+                                            <input id="question" name="question" value="<%= locals.question %>"
+                                                required>
+                                            <label for="points">Points:</label>
+                                            <select id="points" name="points" required>
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                                <option value="6">6</option>
+                                            </select>
+                                            <label for="option1">Option 1:</label>
+                                            <input type="text" id="option1" name="option1" value="<%= locals.option1 %>"
+                                                required>
+                                            <label for="option2">Option 2:</label>
+                                            <input type="text" id="option2" name="option2" value="<%= locals.option2 %>"
+                                                required>
+                                            <label for="option3">Option 3:</label>
+                                            <input type="text" id="option3" name="option3" value="<%= locals.option2 %>"
+                                                required>
+                                            <label for="option4">Option 4:</label>
+                                            <input type="text" id="option4" name="option4" value="<%= locals.option3 %>"
+                                                required>
+                                            <label for="correctOption">Correct Option:</label>
+                                            <select id="correctOption" name="correctOption">
+                                                <option value="Select an Option">Select an Option</option>
+                                                <option value="option1">option 1</option>
+                                                <option value="option2">option 2</option>
+                                                <option value="option3">option 3</option>
+                                                <option value="option4">option 4</option>
+                                            </select> <button type="submit">Add Question</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+        </div>
+    </div>
+
+    <h3>Questions</h3>
+    <% const topicNames=["System Fundamentals", "Computer organisation" , "Networks"
+        , "Computational thinking, problem-solving and programming" , "Abstract data structures" , "Resource management"
+        , "Control" ]%>
+        <% topics.forEach((topic,indexx)=> { %>
+            <div class="accordion" id="questions-accordion">
+                <button class="accordion-button" id="questions-button">
+                    Topic <%= topic.topic %> : <%= topicNames[indexx]%>
+                </button>
+                <div class="accordion-content">
+                    <% topic.questions.forEach((question, index)=> { %>
+                        <p class="question-text">
+                            <%= index + 1 %> : <%= question %>
+                                    <% if (index !==topic.questions.length - 1) { %>
+                                        <hr class="horizontal-line">
+                                        <% } %>
+                        </p>
+                        <% }) %>
+                </div>
+            </div>
+            <% }) %>
+
+                <script>
+                    // accordion functionality 
+                    const accordionButtons = document.querySelectorAll('.accordion-button')
+                    accordionButtons.forEach(button => {
+                        button.addEventListener('click', function () {
+                            const content = this.nextElementSibling
+                            if (content.style.maxHeight) {
+                                content.style.maxHeight = null
+                            } else {
+                                content.style.maxHeight = content.scrollHeight + 'px'
+                            }
+                        })
+                    })
+ 
+                    document.getElementById('rankingPDFbutton').addEventListener('click', function () {
+                        const tableRows = document.querySelectorAll('.ranking-item')
+                        const data = []
+                        tableRows.forEach(row => {
+                            const username = row.querySelector('.username').innerText
+                            const score = row.querySelector('.score').innerText
+                            data.push([username, score])
+                        })
+
+                        // PDF document definition
+                        const docDefinition = {
+                            content: [
+                                { text: 'Student Ranking', style: 'header' },
+                                {
+                                    style: 'table',
+                                    alignment: 'center',
+                                    table: {
+                                        headerRows: 1,
+                                        widths: ['*', '*'],
+                                        body: [
+                                            ['Username', 'Score'],
+                                            ...data
+                                        ]
+                                    }
+                                }
+                            ],
+                            styles: {
+                                header: {
+                                    fontSize: 15,
+                                    bold: true,
+                                    margin: [0, 0, 0, 10]
+                                },
+                                table: {
+                                    margin: [0, 15, 0, 15],
+                                    fontSize: 15
+                                }
+                            }
+                        }
+
+                        // generate PDF
+                        pdfMake.createPdf(docDefinition).download('student_ranking.pdf')
+                    })
+
+                    document.querySelectorAll('.performancePDFbutton').forEach(button => {
+                        button.addEventListener('click', function () {
+                            const dataAttribute = this.getAttribute('data')
+                            const studentAttribute = this.getAttribute('studentUsername')
+                            const topicNames = ["System Fundamentals", "Computer organisation", "Networks"
+                                , "Computational thinking, problem-solving and programming", "Abstract data structures", 
+                                "Resource management", "Control"]
+                            // checking if dataAttribute is not empty and is not an empty string
+                            if (dataAttribute && dataAttribute.trim() !== '' && dataAttribute.trim() !== '[]') {
+                                const quizHistoryData = JSON.parse(dataAttribute)
+                                const parsedQuizHistoryData = quizHistoryData.map(history => JSON.parse(history))
+
+                                const fileName = studentAttribute + '_performance.pdf'
+                                const fileTitle = studentAttribute + ' Performance'
+
+                                // PDF document definition
+                                const docDefinition = {
+                                    content: [
+                                        { text: fileTitle, style: 'header' },
+                                        {
+                                            style: 'table',
+                                            alignment: 'center',
+                                            table: {
+                                                headerRows: 1,
+                                                widths: ['auto', '*', 'auto'],
+                                                body: [
+                                                    ['Date', 'Topic', 'Score'],
+                                                    ...parsedQuizHistoryData.map(history => [history.date, 
+                                                    history.topic + " " + " : " + " " + topicNames[history.topic - 1], 
+                                                    history.score + "/" + history.maxScore])
+                                                ]
+                                            }
+                                        }
+                                    ],
+                                    styles: {
+                                        header: {
+                                            fontSize: 15,
+                                            bold: true,
+                                            margin: [0, 0, 0, 10]
+                                        },
+                                        table: {
+                                            margin: [0, 15, 0, 15],
+                                            fontSize: 12
+                                        }
+                                    }
+                                }
+
+                                // generating PDF and download
+                                pdfMake.createPdf(docDefinition).download(fileName)
+                            } else {
+                                // message indicating empty quiz history data
+                                alert('Quiz history data is empty for this user. Unable to generate performance PDF.')
+                            }
+                        })
+                    })
+                </script>
+
+                <form class="logout" action="/login" method="get">
+                    <button class="log-out-button" type="submit">Logout</button>
+                </form>
+</body>
+
+</html>
