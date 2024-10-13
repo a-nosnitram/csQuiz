@@ -1,5 +1,5 @@
 # csQuiz
-A quiz web application using React JS. Created for personal use (revision). 
+A quiz web application using React JS. 
 
 To start the program paste the following into the conosole : 
 
