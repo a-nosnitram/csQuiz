@@ -12,7 +12,7 @@ Ensure you have Node.js and npm installed on your machine.
 
 1. Clone the repository:
     ```sh
-    git clone <repository-url>
+    git clone https://github.com/a-nosnitram/csQuiz/
     ```
 2. Navigate to the project directory:
     ```sh
